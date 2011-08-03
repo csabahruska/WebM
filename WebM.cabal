@@ -1,0 +1,40 @@
+Name:                WebM
+Version:             0.0.1
+Synopsis:            A wrapper for libvpx codec.
+Description:         A wrapper for libvpx codec.
+License:             BSD3
+License-file:        LICENSE
+Author:              Csaba Hruska
+Maintainer:          csaba (dot) hruska (at) gmail (dot) com
+Homepage:            http://www.haskell.org/haskellwiki/Bullet
+Stability:           Experimental
+Category:            Codec
+--Tested-With:         GHC == 6.10.1, GHC == 6.10.4, GHC == 6.12.1, GHC == 7.0.3
+Cabal-Version:       >= 1.2
+Build-Type:          Simple
+
+Extra-Source-Files:
+  cbits/webmutil.c
+  cbits/webmutil.h
+  Codec/WebM.chs
+
+Library
+  Build-Depends:       base >= 4 && < 5
+
+  Build-tools:         c2hs
+  Exposed-Modules:     Codec.WebM
+  Hs-Source-Dirs:      .
+  Extensions:          ForeignFunctionInterface
+
+  if arch(i386)
+    cc-options:          -march=i686 -m32 -msse2
+  C-Sources:           cbits/webmutil.c
+
+  if os(linux)
+    --Pkgconfig-Depends:   bullet
+    Include-Dirs:        cbits
+  else
+    Extra-Libraries:     vpx
+    Include-Dirs:        cbits
+
+  --ghc-options: -O2
