@@ -116,7 +116,12 @@ Context *allocVP8(int width, int height) {
         free(ctx);
         return 0;
     }
-    
+
+    if(!vpx_img_alloc(&ctx->raw, VPX_IMG_FMT_I420, width, height, 1)) {
+        printf("Faile to allocate image %d %d\n", width, height);
+        return 0;
+    }
+
     ctx->buf_size = 64*1024;
     ctx->buf = calloc(1,ctx->buf_size);
     return ctx;

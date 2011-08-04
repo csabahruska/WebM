@@ -3,7 +3,7 @@
 
 module Codec.WebM (allocVP8,freeVP8,encodeFrame) where
 
-import C2HS
+import Codec.WebM.C2HS
 import Control.Monad
 import Data.ByteString
 import Data.Word
@@ -20,7 +20,7 @@ mkBuffer p = liftM Buffer $ newForeignPtr_ $ castPtr p
 {#fun rawFrameBuffer { withVP8Codec* `VP8Codec'  } -> `Buffer' mkBuffer* #}
 {#fun encodeFrame as encodeFrameRaw { withVP8Codec* `VP8Codec', alloca- `Int' peekIntConv* } -> `Buffer' mkBuffer* #}
 
-encodeFrame :: VP8Codec -> (Ptr Word -> IO ()) -> IO ByteString
+encodeFrame :: VP8Codec -> (Ptr Word8 -> IO ()) -> IO ByteString
 encodeFrame vp8 fill = do
     b <- rawFrameBuffer vp8
     withBuffer b $ \a -> fill $ castPtr a
